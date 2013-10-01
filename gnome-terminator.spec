@@ -1,13 +1,16 @@
+#TODO:
+# * Patch sources to complete partial rename process from terminator to gnome-terminator
+%define	pnam	terminator
 Summary:	Store and run multiple GNOME terminals in one window
-Name:		terminator
-Version:	0.96
+Name:		gnome-terminator
+Version:	0.97
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
-Source0:	http://code.launchpad.net/terminator/trunk/%{version}/+download/%{name}_%{version}.tar.gz
-# Source0-md5:	070e3878336b341c9e18339d89ba64fe
+Source0:	http://code.launchpad.net/terminator/trunk/%{version}/+download/%{pnam}-%{version}.tar.gz
+# Source0-md5:	2b32b59c0a5ed2bee45cc57cf861f4d8
 Patch0:		%{name}-fix-NewWindow-issue.patch
-URL:		http://www.tenshu.net/terminator
+URL:		http://gnometerminator.blogspot.com/
 BuildRequires:	desktop-file-utils
 BuildRequires:	gettext
 BuildRequires:	intltool
@@ -24,6 +27,7 @@ Requires:	python-gnome-gconf
 Requires:	python-keybinder
 Requires:	python-modules
 Requires:	python-vte0
+Obsoletes:	terminator <= 0.96
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -35,7 +39,7 @@ of terminals. As such, you can produce a very flexible arrangements of
 terminals for different tasks.
 
 %prep
-%setup -q
+%setup -q -n %{pnam}-%{version}
 %patch0
 
 %{__sed} -i '/#! \?\/usr.*/d' terminatorlib/*.py
@@ -58,7 +62,7 @@ rm -rf $RPM_BUILD_ROOT
 %py_comp $RPM_BUILD_ROOT%{py_sitescriptdir}
 %py_postclean
 
-%find_lang %{name}
+%find_lang %{pnam}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -69,15 +73,16 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 %update_icon_cache hicolor
 
-%files -f %{name}.lang
+%files -f %{pnam}.lang
 %defattr(644,root,root,755)
 %doc README COPYING ChangeLog
-%attr(755,root,root) %{_bindir}/%{name}
+%attr(755,root,root) %{_bindir}/%{pnam}
+%attr(755,root,root) %{_bindir}/remotinator
 %{py_sitescriptdir}/*
-%{_desktopdir}/%{name}.desktop
-%{_iconsdir}/hicolor/*/*/%{name}*.png
-%{_iconsdir}/hicolor/*/*/%{name}*.svg
+%{_desktopdir}/%{pnam}.desktop
+%{_iconsdir}/hicolor/*/*/%{pnam}*.png
+%{_iconsdir}/hicolor/*/*/%{pnam}*.svg
 %{_iconsdir}/hicolor/16x16/status/terminal-bell.png
-%{_pixmapsdir}/%{name}.png
-%{_mandir}/man1/%{name}.*
-%{_mandir}/man5/%{name}_config.*
+%{_pixmapsdir}/%{pnam}.png
+%{_mandir}/man1/%{pnam}.*
+%{_mandir}/man5/%{pnam}_config.*
